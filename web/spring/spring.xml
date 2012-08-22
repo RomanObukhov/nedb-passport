@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+       http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.1.xsd
+       http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.1.xsd
+">
+    <!-- Активация аннотаций в классах -->
+    <context:annotation-config/>
+    <!-- Сканирование пакета DAO -->
+    <context:component-scan base-package="kz.bee.nedb.passport.dao"/>
+    <!-- Сканирование пакета сервисов -->
+    <context:component-scan base-package="kz.bee.nedb.passport.service"/>
+    
+    <!-- Конфигуратор на основе файла свойств JDBC -->
+    <bean id="jdbcPropertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer" p:location="/hibernate/jdbc.properties"/>
+    
+    <!-- Настройка источника данных (доступа БД) -->
+    <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource"
+        p:driverClassName="${jdbc.driverClassName}"
+        p:url="${jdbc.databaseurl}"
+        p:username="${jdbc.username}"
+        p:password="${jdbc.password}"/>
+    
+    <!-- Настройка фабрики сессий БД-->
+    <bean id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+        <!-- Источник данных -->
+        <property name="dataSource" ref="dataSource"/>
+        <!-- Файл конфигурации hibernate -->
+        <property name="configLocation" value="/hibernate/hibernate.cfg.xml"/>
+        <!-- Дополнительные настройки hibernate -->
+        <property name="hibernateProperties">
+            <props>
+                <!-- Включение отображения запросов -->
+                <prop key="hibernate.show_sql">false</prop>
+                <!-- Назначение диалекта БД -->
+                <prop key="hibernate.dialect">${jdbc.dialect}</prop>
+                <!-- Кодировка соединения с БД -->
+                <prop key="hibernate.connection.charSet">UTF-8</prop>
+            </props>
+        </property>
+    </bean>
+    
+    <!-- Настройка менеджера транзакций -->
+    <bean id="transactionManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager">
+        <!-- Фабрика сессий -->
+        <property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+    
+    <!-- Привязка менеджера транзакций к аннотациям -->
+    <tx:annotation-driven transaction-manager="transactionManager"/>
+    
+    <!-- Настройка источника ресурсов переводов -->
+    <bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+        <!-- Пути к файлам ресурсов начинаются с этого значения (заканчиваются на "_<локаль>.properties") -->
+        <property name="basename" value="/resources/trans"/>
+        <!-- Кодировка файлов ресурсов по умолчанию -->
+        <property name="defaultEncoding" value="UTF-8"/>
+    </bean>
+    
+    <!-- Настройка перехватчика изменения локали -->
+    <bean id="localeChangeInterceptor" class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor">
+        <!-- Настрока параметра http-запроса, который будет сменять л�каль -->
+        <property name="paramName" value="lang"/>
+    </bean>
+    
+    <!-- Настройка определителя локали -->
+    <bean id="localeResolver" class="org.springframework.web.servlet.i18n.CookieLocaleResolver">
+        <!-- Локаль по умолчанию -->
+        <property name="defaultLocale" value="ru"/>
+    </bean>
+</beans>

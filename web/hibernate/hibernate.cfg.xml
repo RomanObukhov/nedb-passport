@@ -1,0 +1,27 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-configuration PUBLIC
+    "-//Hibernate/Hibernate Configuration DTD//EN"
+    "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+    <!--"http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">-->
+<hibernate-configuration>
+    <session-factory>
+        <mapping class="kz.bee.nedb.passport.entity.ClassItemTree"/>
+        <mapping class="kz.bee.nedb.passport.entity.Indicator"/>
+        <mapping class="kz.bee.nedb.passport.entity.Measure"/>
+        <mapping class="kz.bee.nedb.passport.entity.PassData"/>
+        <mapping class="kz.bee.nedb.passport.entity.PassIndLink"/>
+        <mapping class="kz.bee.nedb.passport.entity.PassIndSpLink"/>
+        <mapping class="kz.bee.nedb.passport.entity.Passport"/>
+        <mapping class="kz.bee.nedb.passport.entity.SchoolList"/>
+        <mapping class="kz.bee.nedb.passport.entity.FLCError"/>
+        <mapping class="kz.bee.nedb.passport.entity.SchoolTeacherLink"/>
+        <mapping class="kz.bee.nedb.passport.entity.Teacher"/>
+        <mapping class="kz.bee.nedb.passport.entity.TeacherData"/>
+        <mapping class="kz.bee.nedb.passport.entity.SpClass"/>
+        <mapping class="kz.bee.nedb.passport.entity.SchoolStudentLink"/>
+        <mapping class="kz.bee.nedb.passport.entity.Student"/>
+        <mapping class="kz.bee.nedb.passport.entity.StudentData"/>
+        <mapping class="kz.bee.nedb.passport.entity.OrgTypeCITLink"/>
+        <mapping class="kz.bee.nedb.passport.entity.OrgTypeIndLink"/>
+    </session-factory>
+</hibernate-configuration>
